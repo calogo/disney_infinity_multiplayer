@@ -1,0 +1,32 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# ============================================================
+#  NUNCA subir: archivos del juego ni decompilación literal
+#  (red de seguridad por si copias archivos a este repo)
+# ============================================================
+# Binarios / archivos del juego
+*.exe
+*.dll
+*.bin
+DisneyInfinity3*
+# Proyectos y volcados de Ghidra (decompilación derivada del binario con copyright)
+*.gpr
+*.rep
+*.gzf
+ghidra_project/
+analisis_ghidra/
+# Registro técnico con fragmentos decompilados (mantener en privado)
+HANDOFF_TECNICO.md
+HANDOFF.md
