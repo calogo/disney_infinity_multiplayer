@@ -24,6 +24,7 @@ método de [CrabeLoader](https://github.com/LucasLhomme/DisneyInfinity-SplitScre
 
 ➡️ **Receta completa y direcciones en [`CO-OP_FUNCIONA.md`](CO-OP_FUNCIONA.md).**
 ➡️ Cómo encajan los dos proyectos en [`COLABORACION_CrabeLoader.md`](COLABORACION_CrabeLoader.md).
+🙌 **Mérito compartido con [CrabeLoader](https://github.com/LucasLhomme/DisneyInfinity-SplitScreenMods) (LucasLhomme) — ver [`CREDITOS.md`](CREDITOS.md).**
 
 ### El camino (hitos previos, todos en vivo)
 - Pantalla partida real (repunte de `PTR_FUN_020129f4`).
