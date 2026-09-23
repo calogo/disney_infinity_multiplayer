@@ -30,3 +30,6 @@ analisis_ghidra/
 # Registro técnico con fragmentos decompilados (mantener en privado)
 HANDOFF_TECNICO.md
 HANDOFF.md
+
+# El DLL compilado del mod SI se versiona (para instalar sin compilar)
+!mod/coop_bink2w32.dll

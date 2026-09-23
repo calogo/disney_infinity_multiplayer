@@ -14,6 +14,28 @@ problema y la hoja de ruta con próximos pasos concretos.
 
 ---
 
+## 🚀 MOD INSTALABLE (DLL nativo) — ¡CO-OP EN MUNDOS + SELECCIÓN DE PERSONAJE!
+Ya no es solo un script de investigación: hay un **mod instalable de verdad** en **[`mod/`](mod/)**.
+Un único **proxy `bink2w32.dll`** (compilado con Zig, sin Python/Frida) que:
+
+- **START en el mando 2** → el Jugador 2 se une: **pantalla partida, cámara propia, mando propio,
+  cuerpo sólido** — en **Toy Box Y en Play Sets** (mundos de historia). ✅
+- **LB+RB en el mando 2** → el Jugador 2 **cambia de personaje EN VIVO** (con su **modelo cargado**
+  de verdad, no un placeholder). ✅
+- Personaje inicial de P2 configurable por SKU en `coop_p2.txt` (lista completa de 111 personajes
+  en [`mod/CHARACTERS_SKU.txt`](mod/CHARACTERS_SKU.txt)).
+
+Instalación = copiar unos archivos + doble clic. Solo memoria del proceso: **no toca saves, red ni
+logros**, reversible. Fuente en [`mod/src/coop.c`](mod/src/coop.c), guía en [`mod/README.md`](mod/README.md),
+y la **receta técnica exacta para integrarlo en CrabeLoader** en
+[`mod/RECIPE_FOR_CRABELOADER.md`](mod/RECIPE_FOR_CRABELOADER.md).
+
+Piezas clave nuevas: drop-in `FUN_00a9b020(gameLoop,1)` (join) · materialización del cuerpo (hook
+`e01890`) · **carga de modelo** vía `FUN_00b73060` (ruta `ActivateChanges`) · resolución sku→item
+(`item+0xC8`=sku, `item+0xD0`=nombre).
+
+---
+
 ## 🏆 CO-OP LOCAL DE 2 JUGADORES — FUNCIONANDO (probado en vivo, con foto)
 **2 personajes sólidos (Hulk + Mickey) + 2 cámaras independientes + pantalla partida + MANDOS
 SEPARADOS + estable.** Es el primer co-op local jugable conseguido en el port de PC de DI3.
@@ -33,10 +55,13 @@ método de [CrabeLoader](https://github.com/LucasLhomme/DisneyInfinity-SplitScre
 - **La tecla final:** el join de P2 se hace llamando **directamente** al drop-in `FUN_00a9b020(gameLoop,1)`
   (saltando los gates que petan), y forzando el cuerpo del avatar (disparar + congelar).
 
-## Pendiente
-- **P2 no puede cambiar de muñeco** (la colección le sale bloqueada).
-- Pulir el forzado del cuerpo (ahora es bucle+congelar); exponer un selector de personaje de P2.
-- **Cualquier personaje en cualquier Play Set** (2º objetivo): falta localizar el gate real del menú.
+## Estado / pendiente
+- ✅ **Co-op funciona en mundos (Play Sets)**, no solo Toy Box.
+- ✅ **P2 elige y cambia de personaje** (por SKU + botón LB+RB), con su **modelo cargado**.
+- ⏳ El cambiador rota por **todos** los personajes (aún no filtra por franquicia del mundo).
+- ⏳ Desbloquear el **menú/colección nativo** de P2 sigue siendo el muro del "perfil-invitado"
+  (lo cubre `ForceUnlockData` de CrabeLoader → integración con Lucas).
+- El cambio de personaje puede parpadear a P1 como "holograma" un instante (se auto-resuelve).
 
 Detalle técnico completo en **[`HOJA_DE_RUTA.md`](HOJA_DE_RUTA.md)**, **[`CO-OP_FUNCIONA.md`](CO-OP_FUNCIONA.md)**
 y **[`AVANCES_JUGADOR2.md`](AVANCES_JUGADOR2.md)**.

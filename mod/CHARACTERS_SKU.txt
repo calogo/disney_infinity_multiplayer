@@ -1,0 +1,37 @@
+========================================================
+  Character -> SKU list (for coop_p2.txt)
+  Put the SKU (hex) of the character you want as Player 2's STARTING character
+  in coop_p2.txt.   e.g.  f4308   (Anakin)   or   0xf4308
+  In a Play Set (story world), Player 2 must be a character of that franchise.
+  In-game you can also cycle characters with LB+RB on controller 2.
+  (Full list dumped live from the game; item+0xC8 = sku, item+0xD0 = name.)
+========================================================
+
+--- STAR WARS: Twilight of the Republic (Clone Wars) ---
+Ahsoka=f430b   Anakin=f4308   ObiWan=f4309   Yoda=f430a   DarthMaul=f430c
+
+--- STAR WARS: Rise Against the Empire ---
+Luke=f430e   HanSolo=f430f   Leia=f4310   Chewbacca=f4311   Vader=f4312   BobaFett=f4313
+
+--- STAR WARS: Rebels ---
+Ezra=f4314   Kanan=f4315   Sabine=f4316   Zeb=f4317
+
+--- MARVEL (Avengers / Guardians / Spider-Man) ---
+CaptainAmerica=f42a4   Hulk=f42a5   Ironman=f42a6   Thor=f42a7   Groot=f42a8
+Rocket=f42a9   Starlord=f42aa   Spiderman=f42ab   NickFury=f42ac   BlackWidow=f42ad
+Hawkeye=f42ae   Drax=f42af   Gamora=f42b0   IronFist=f42b1   Nova=f42b2
+Venom=f42b3   Loki=f42bc   Ronan=f42bd   GreenGoblin=f42be   Falcon=f42bf
+Yondu=f42c0   Ultron=f4322   Antman=f4323   CaptainAmerica3=f4325   Vision=f4321
+BlackPanther=f4336   HulkBuster=f432e
+
+--- DISNEY / PIXAR ---
+ClassicMickey=f431d   MickeyMouse=f4255   Minnie=f431e   Elsa=f4259   Anna=f4258
+Olaf=f4320   Aladdin=f42b5   Jasmine=f42c1   Mulan=f431f   Stitch=f42b6
+Maleficent=f42b9   Merida=f42b7   Tinkerbell=f42b8   Baymax=f42bb   Hiro=f42ba
+Woody=f4250   Buzz=f4248   Jessie=f4249   JackSparrow=f4243   Barbossa=f424c
+Donald=f42b4   Quorra=f42d7   SamFlynn=f42d6   NickWilde=f432c   JudyHopps=f432d   Spot=f432b
+
+--- INSIDE OUT ---
+Joy=f4318   Anger=f4319   Fear=f431a   Sadness=f431b   Disgust=f431c
+
+(Note: "Crystal"/"Premium" variants are power discs, not normal characters. Don't use those.)
