@@ -24,7 +24,11 @@ import frida, time
 PROC = "DisneyInfinity3.exe"
 SPLIT_MODE = 2
 
-session = frida.attach(PROC)
+print("Esperando el juego...", flush=True)
+while True:
+    try: session = frida.attach(PROC); break
+    except frida.ProcessNotFoundError: time.sleep(0.2)
+print("Enganchado.", flush=True)
 
 JS = r'''
 var SPLIT_MODE = %d;
@@ -48,11 +52,12 @@ var P2_AVATAR = 0xf431d, POSX = 0x10000;
 
 var mgr=null, frames=0, newHandle=0, patchDone=false, crashed=false, frozenMsg=false, camDone=false, patchFrame=0;
 var de9Count=0, de9Fixed=0;
-var cam0Addr=null, cam1Addr=null, add10Log=0, updCallers={}, updHooked=false, camFedMsg=false;
+var cam0Addr=null, cam1Addr=null, add10Log=0, updCallers={}, updHooked=false, camFedMsg=false, camFedMsg2=false;
 var DAT_camListHead = base.add(0x1E8E8E4);   // DAT_0228e8e4 (0x0228e8e4-0x400000) cabeza lista camaras, next en +0x1c0
 // --- seguimiento de camara vía GESTOR (FUN_018adcf0): eye=mgr+0x3c..0x44, target=mgr+0x48..0x50 ---
 var camMgr=null, curCam=null, ahsokaET=null, camPocMsg=false, dc1Cam0=0, dc1Cam1=0, mickeyPos=null, mickeyEnt=null, etLogged=false;
-var FOLLOW_MICKEY = false;   // false = inyecta vista de cam0 (prueba render); true = desvia a Mickey
+var FOLLOW_MICKEY = true;   // true = la 2a camara SIGUE a Mickey (posicion real en entidad+0x134)
+var mickeyEnt2 = null;      // entidad de Mickey capturada via el resolver hookeado
 function injectMickey(){
   camMgr.add(0x3c).writeByteArray(ahsokaET);   // primero la vista de Ahsoka (estado valido)
   var aeX=camMgr.add(0x3c).readFloat(), aeY=camMgr.add(0x40).readFloat(), aeZ=camMgr.add(0x44).readFloat();
@@ -252,6 +257,12 @@ Interceptor.attach(A(RVA.a9fd00), {
   }
 });
 
+// RESOLVER hookeado: capturar la ENTIDAD real de Mickey (por su handle) -> pos en +0x134
+Interceptor.attach(A(0x92E20), {
+  onEnter:function(a){ this.hm=false; try{ if(newHandle!==0 && a[1].readU32()===newHandle) this.hm=true; }catch(e){} },
+  onLeave:function(r){ if(!this.hm||r.isNull()) return; try{ var e=r.add(8).readPointer(); if(!e.isNull()) mickeyEnt2=e; }catch(e){} }
+});
+
 function repointCalc(){
   var before = PTR_calcMode.readPointer();
   send(">>> PTR_calcMode (0x1C129F4) ANTES = "+before+"   (stub esperado @ "+STUB+")");
@@ -295,6 +306,15 @@ Interceptor.attach(A(RVA.e01890), {
         mgr.add(0x845).writeU8(1);   // skip slot -> avatar solido, fin del bucle de creacion
         mgr.add(0x83a).writeU8(0);   // apagar solicitud de union pendiente
         if(!frozenMsg){ frozenMsg=true; send(">>> Mickey materializado; SOLIDIFICO (mgr+0x845=1) y congelo la peticion."); }
+        // posicion REAL de Mickey (entidad+0x134) copiada a +0x268 y +0x2c, que es de
+        // donde el FOLLOW nativo de la camara (FUN_018b9e40) lee la posicion del avatar.
+        if(mickeyEnt2){ try{
+          var px=mickeyEnt2.add(0x134).readFloat(), py=mickeyEnt2.add(0x138).readFloat(), pz=mickeyEnt2.add(0x13c).readFloat();
+          mickeyPos={ x:px, y:py, z:pz };
+          mickeyEnt2.add(0x268).writeFloat(px); mickeyEnt2.add(0x26c).writeFloat(py); mickeyEnt2.add(0x270).writeFloat(pz);
+          mickeyEnt2.add(0x2c).writeFloat(px);  mickeyEnt2.add(0x30).writeFloat(py);  mickeyEnt2.add(0x34).writeFloat(pz);
+          if(!camFedMsg2){ camFedMsg2=true; send(">>> pos Mickey ["+px.toFixed(1)+","+py.toFixed(1)+","+pz.toFixed(1)+"] -> +0x268/+0x2c (follow nativo). MIRA EL PANEL DERECHO."); }
+        }catch(e){} }
       }
       // Con el jugador 2 materializado, REPUNTAR el calc de modo UNA vez.
       if(!patchDone && frames > 170 && newHandle !== 0){

@@ -14,20 +14,31 @@ problema y la hoja de ruta con próximos pasos concretos.
 
 ---
 
-## ✅ Conseguido (probado en vivo)
-- **La pantalla se PARTE de verdad** — 2 viewports, línea divisoria, estable, sin crash.
-- **Segundo personaje materializado, SÓLIDO y (en su momento) jugable con el mando 2.**
-- **Popup nativo de "pulsa Start para unirte"** reproducido en PC.
-- **Mapa completo** de cómo se relacionan cámara ↔ mando ↔ jugador local.
+## 🏆 CO-OP LOCAL DE 2 JUGADORES — FUNCIONANDO (probado en vivo, con foto)
+**2 personajes sólidos (Hulk + Mickey) + 2 cámaras independientes + pantalla partida + MANDOS
+SEPARADOS + estable.** Es el primer co-op local jugable conseguido en el port de PC de DI3.
 
-## ❌ Los dos muros (documentados)
-1. **Split-screen jugable estable:** el binding del *mando físico → jugador 2* depende de la
-   confirmación de la **figura física en el portal**, que en PC no existe. Ese mismo binding da
-   objetivo a la 2ª cámara → cámara y mando fallan por la misma raíz.
-2. **Cualquier personaje en cualquier Play Set:** la función de compat. que se probó no es el gate
-   del menú. Falta localizar el filtro real (candidatos anotados). Probablemente más alcanzable.
+Se logró **combinando dos proyectos complementarios**: el **join nativo** (mando+viewport+split) del
+método de [CrabeLoader](https://github.com/LucasLhomme/DisneyInfinity-SplitScreenMods) + la
+**creación de personaje** de este repo. Todo en un script Frida: **[`scripts/dropin_full.py`](scripts/dropin_full.py)**.
 
-Detalle completo y próximos pasos en **[`HOJA_DE_RUTA.md`](HOJA_DE_RUTA.md)**.
+➡️ **Receta completa y direcciones en [`CO-OP_FUNCIONA.md`](CO-OP_FUNCIONA.md).**
+➡️ Cómo encajan los dos proyectos en [`COLABORACION_CrabeLoader.md`](COLABORACION_CrabeLoader.md).
+
+### El camino (hitos previos, todos en vivo)
+- Pantalla partida real (repunte de `PTR_FUN_020129f4`).
+- Lectura del **mando 2** (`XInputGetState(1)`); offset de **posición del avatar** (`entidad+0x134`);
+  **resolver handle→entidad** (`FUN_00492e20`); mapa cámara↔mando↔jugador. Ver [`AVANCES_JUGADOR2.md`](AVANCES_JUGADOR2.md).
+- **La tecla final:** el join de P2 se hace llamando **directamente** al drop-in `FUN_00a9b020(gameLoop,1)`
+  (saltando los gates que petan), y forzando el cuerpo del avatar (disparar + congelar).
+
+## Pendiente
+- **P2 no puede cambiar de muñeco** (la colección le sale bloqueada).
+- Pulir el forzado del cuerpo (ahora es bucle+congelar); exponer un selector de personaje de P2.
+- **Cualquier personaje en cualquier Play Set** (2º objetivo): falta localizar el gate real del menú.
+
+Detalle técnico completo en **[`HOJA_DE_RUTA.md`](HOJA_DE_RUTA.md)**, **[`CO-OP_FUNCIONA.md`](CO-OP_FUNCIONA.md)**
+y **[`AVANCES_JUGADOR2.md`](AVANCES_JUGADOR2.md)**.
 
 ---
 
